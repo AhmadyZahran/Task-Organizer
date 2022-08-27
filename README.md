@@ -19,4 +19,5 @@ Osama Dosoky
 Ahmad Zahran
 Ibrahim Taqieddin
 Rama Jaradat
+waad awajneh
 live link :
