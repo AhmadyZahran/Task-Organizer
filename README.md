@@ -27,4 +27,4 @@ waad awajneh
 
 Trello URL : https://trello.com/b/YStX5fIr/project
 
-wireframe and mockup pdf : task-organizae.pdf
+wireframe and mockup pdf : [task-organizaer_1.pdf](https://github.com/AhmadyZahran/Task-Organizer/files/9438612/task-organizaer_1.pdf)
