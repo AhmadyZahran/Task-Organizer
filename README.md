@@ -20,4 +20,11 @@ Ahmad Zahran
 Ibrahim Taqieddin
 Rama Jaradat
 waad awajneh
-live link :
+
+#live link : https://ahmadyzahran.github.io/Task-Organizer/
+
+#organization github link : https://github.com/Task-Organizer/Main-Task-Organizer/tree/main
+
+Trello URL : https://trello.com/b/YStX5fIr/project
+
+wireframe and mockup pdf : task-organizae.pdf
