@@ -38,7 +38,6 @@ addIcon.addEventListener("click", () => {
   }
 })
 
-
 //waed & rama -------------------------------------------------------------------------
 
 let AllUserTasks = [];
@@ -55,9 +54,28 @@ function taskFormFunc(event) {
 
   let newTask = new Task(title, priority, deadline, desc);
   AllUserTasks.push(newTask);
+  if (AllUserTasks.length==1){document.querySelector(".all-task").innerHTML =""}
   saveTaskToLocal();
   print(newTask);
+  statistic()
   document.forms[0].reset();
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+  
+  Toast.fire({
+    icon: 'success',
+    title: 'Task added successfully '
+  })
 }
 
 function Task(title, priority, deadline, desc) {
@@ -80,30 +98,27 @@ function getTaskFromLocal() {
     AllUserTasks = arrOfObjct;
     AllUserTasks.forEach((task) => {
       print(task);
-      // return arrOfObjct
     });
   } else {
     document.querySelector(".all-task").innerHTML = `<h3>There are no tasks to display. <span id ="noTasks">Let's put the first one up.</span></h3>`
   }
-}
+} 
+getTaskFromLocal()
 
 // filter task base Priority
 const critical = document.querySelectorAll(".drop-list")[0];
 let tasks = document.querySelector(".all-task")
 critical.addEventListener("click",  () => {
   tasks.innerHTML = "";
-  let filteredTasks = AllUserTasks.filter(ele => {
+  let filteredTasks = AllUserTasks.filter( ele => {
     if (ele.priority == `Critical`) {
       print(ele)
       return true
     }
-    
   })
   if (filteredTasks.length == 0) {
     tasks.innerHTML = `<h3>There are no <span id ="noTasks">Critical tasks </span>  to display.`;  
   }
-
-  // console.log(filteredTasks); 
 })
 
 const Normal = document.querySelectorAll(".drop-list")[1];
@@ -139,6 +154,7 @@ lowPriority.addEventListener("click", () => {
 
 // filter task base state
 
+
 const completed = document.querySelectorAll(".drop-list")[3];
 completed.addEventListener("click", () => {
   let tasks = document.querySelector(".all-task")
@@ -152,6 +168,7 @@ completed.addEventListener("click", () => {
   if (filteredTasks.length == 0) {
     tasks.innerHTML = `<h3>There are no <span id ="noTasks">Complete tasks </span>  to display.`;  
   }
+
 })
 const uncompleted = document.querySelectorAll(".drop-list")[4];
 uncompleted.addEventListener("click", () => {
@@ -161,7 +178,6 @@ uncompleted.addEventListener("click", () => {
       print(ele)
       return true
     }
-    
   })
   if (filteredTasks.length == 0) {
     tasks.innerHTML = `<h3>There are no <span id ="noTasks">Uncompleted  </span> tasks to display.`;  
@@ -187,16 +203,17 @@ clearAll.addEventListener("click", () => {
 Swal.fire({
   title: 'Are you sure?',
   text: "You won't be able to revert this!",
-  icon: 'warning',
+  icon: 'error',
   showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
+  confirmButtonColor: 'red',
+  cancelButtonColor: '#9415c6',
   confirmButtonText: 'Yes, delete it!'
 }).then((result) => {
   if (result.isConfirmed) {
     tasks.innerHTML = `<h3>There are no <span id ="noTasks"> tasks </span>  to display.<h3>`;
     AllUserTasks = [];
     localStorage.setItem(currentUser.email, JSON.stringify(AllUserTasks));
+    statistic()
     Swal.fire(
       'Deleted!',
       'Your file has been deleted.',
@@ -212,10 +229,10 @@ completedClear.addEventListener("click", () => {
   Swal.fire({
     title: 'Are you sure?',
     text: "You won't be able to revert this!",
-    icon: 'warning',
+    icon: 'error',
     showCancelButton: true,
-    confirmButtonColor: '#9415c6',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: 'red',
+    cancelButtonColor: '#9415c6',
     confirmButtonText: 'Yes, delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
@@ -228,7 +245,7 @@ completedClear.addEventListener("click", () => {
       })
       AllUserTasks = filteredTasks;
       saveTaskToLocal()
-      // console.log(filteredTasks);
+      statistic()
       if (filteredTasks.length == 0) {
         tasks.innerHTML = `<h3>There are no <span id ="noTasks" >tasks </span>  to display.`;  
       }
@@ -270,12 +287,15 @@ logout.addEventListener("click", function () {
 //===========================================================================
 
 function print(userTask) {
-
   const allTask = document.querySelector(".all-task");
+  // if (AllUserTasks.length == 0) {
+  //     allTask.innerHTML=""
+  //   }
+
   let task = document.createElement("div");
   task.setAttribute("class", "task");
   allTask.appendChild(task);
-
+  
   let h4 = document.createElement("h4");
   task.appendChild(h4);
   h4.textContent = userTask.title;
@@ -334,17 +354,17 @@ function print(userTask) {
     deleteTask(userTask);
   });
   /// --------------------------------------
-  // let edit = document.createElement("span");
-  // edit.setAttribute("class", "icon edit");
-  // task.appendChild(edit);
+  let edit = document.createElement("span");
+  edit.setAttribute("class", "icon edit");
+  task.appendChild(edit);
 
-  // let editI = document.createElement("i");
-  // editI.setAttribute("class", "fa-solid fa-pen");
-  // edit.appendChild(editI);
+  let editI = document.createElement("i");
+  editI.setAttribute("class", "fa-solid fa-pen");
+  edit.appendChild(editI);
 
-  // editI.addEventListener("click", () => {
-  //   editTask(userTask);
-  // });
+  editI.addEventListener("click", () => {
+    updateTask(userTask);
+  });
   
 }
 
@@ -355,10 +375,10 @@ function deleteTask(userTask) {
       Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: 'error',
       showCancelButton: true,
-      confirmButtonColor: '#9415c6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: 'red',
+      cancelButtonColor: '#9415c6',
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -366,6 +386,7 @@ function deleteTask(userTask) {
         let tasks = document.querySelector(".all-task")
         tasks.innerHTML = ""; 
         AllUserTasks.forEach(ele => print(ele))
+        statistic()
         saveTaskToLocal();
         }
     })   
@@ -388,103 +409,78 @@ function doneStat(userTask) {
       tasks.innerHTML = ""; 
       saveTaskToLocal();
       AllUserTasks.forEach(ele => print(ele))
+      statistic()
       }
     })
 }
 
 
 
-// let editI = document.querySelector("icon.edit");
-// let edit = document.createElement("span");
-//   editI.addEventListener("click", () => {
-//     editTask(userTask);
-//   });
 
+let okValur;
+function updateTask(userTask) {
+  let taskFilter = AllUserTasks.filter((t) => {
+    if (t == userTask) return true;
+  });
 
-// function editTask(userTask) {
-//   let taskFilter = AllUserTasks.filter((t) => {
-//     if (t == userTask) return true;
-//   });
+  const { value: formValues } =  Swal.fire({
+    title: 'Edit Task information',
+    html:
+      `<input type="text" id="swal-input1" class="swal2-input" value="${userTask.title}"  >` +
+      `<input type="date" id="swal-input2" class="swal2-input"  value="${userTask.deadline}" >`+
+      `<textarea id="swal-input3" class="swal2-input">${userTask.desc}</textarea>`+
+      `<select name="Task-Priority" id="swal-input4" class="swal2-input">
+        <option value="Critical">Critical</option>
+        <option value="Normal" selected>Normal</option>
+        <option value="Low-priority">Low priority</option>
+      </select>`,
+    focusConfirm: false,
+    preConfirm: () => {
+      return [
+        okValur = document.querySelector(".swal2-confirm.swal2-styled"),
+        okValur.onclick = saveEdit(userTask)
+      ]
+    }
+  })
   
-//   let save = document.getElementById("save");
-//   save.style.display = "block";
-//   let add = document.getElementById("add");
-//   add.style.display = "none";
-//   add.removeEventListener("submit", taskFormFunc);
+  if (formValues) {
+    Swal.fire(JSON.stringify(formValues))
+    console.log(title,deadline,desc);
+  }
 
-//   console.log(save);
-//   console.log(add);
+}
 
-//   let title = document.getElementById("Title");
-//   let priority = document.getElementById("Task-Priority");
-//   let deadline = document.getElementById("deadline");
-//   let desc = document.getElementById("desc");
-//   title.setAttribute("value", userTask.title);
-//   priority.setAttribute("value", userTask.priority);
-//   deadline.setAttribute("value", userTask.deadline);
-//   desc.textContent = userTask.desc;
-//   save.addEventListener("click", () => {
-//     updateFun(userTask);
-//   });
-
-//   const { value: formValues } =  Swal.fire({
-//     title: 'Multiple inputs',
-//     html:
-//       `title 
-//       <input type="text" id="swal-input1" class="swal2-input" value="${userTask.title}" >` +
-//       `deadline
-//       <input type="date" id="swal-input2"class="swal2-input"  value="${userTask.deadline}" >` +
-//       `Description 
-//       <textarea name="desc" id="swal-input3" class="swal2-input" required>${userTask.desc}</textarea>` +
-//       `priority 
-//       <select name="Task-Priority" id="swal-input4" class="swal2-input">
-//         <option value="Critical">Critical</option>
-//         <option value="Normal" selected>Normal</option>
-//         <option value="Low-priority">Low priority</option>
-//       </select>`,
-//     focusConfirm: false,
-//     preConfirm: () => {
-//       return [
-//         document.getElementById('swal-input1').value,
-//         document.getElementById('swal-input2').value
-//       ]
-//     }
-//   })
+function saveEdit(userTask) {
+  let title = document.getElementById('swal-input1').value;
+  let deadline = document.getElementById('swal-input2').value;
+  let desc = document.getElementById('swal-input3').value;
+  let priority = document.getElementById('swal-input4').value;
   
-//   if (formValues) {
-//     Swal.fire(JSON.stringify(formValues))
-//   }
+  userTask.title = title;
+  userTask.deadline = deadline;
+  userTask.desc = desc;
+  userTask.priority = priority;
+
+  AllUserTasks.splice(AllUserTasks.indexOf(userTask),1,userTask)
+  tasks.innerHTML = "";
+  AllUserTasks.forEach(ele => print(ele))
+  console.log(userTask);
+  saveTaskToLocal()
+}
+
+
+function statistic() {
+  let statistic = document.getElementById("statistic");
+  let numberCompleted = AllUserTasks.filter(ele => {
+    if (ele.stat != "uncompleted") return true;
+  })
+  console.log(numberCompleted);
+  statistic.innerHTML =`Completed Task :<span class="color"> ${numberCompleted.length} </span>  -  UnCompleted Task :<span class="color"> ${AllUserTasks.length- numberCompleted.length}</span>`  
+}  
+statistic()
 
 
 
-
-//   // let save = document.getElementById("save");
-//   // save.style.display = "none";
-//   // let add = document.getElementById("add");
-//   // add.style.display = "block";
-
-//   // deleteTask();
-
-//   // AllUserTasks.indexOf(userTask);
-//   // AllUserTasks = taskFilter;
-//   // saveTaskToLocal();
-// }
-// function updateFun(userTask) {
-  
-//   AllUserTasks.filter(ele => {
-//     let tasks = document.querySelector(".all-task")
-//     tasks.innerHTML = ""
-//     print(ele)
-//   })
-//   console.log(AllUserTasks);
-//   console.log(AllUserTasks[0].title);
-//   // console.log(taskFilter[0]);
-
-//   // AllUserTasks.forEach((ele) => print(ele));
-//   // document.forms[0].reset();
-// }
-
-  getTaskFromLocal()
 
 
 

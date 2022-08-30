@@ -1,30 +1,42 @@
-# Task-Organizer
+# Main-Task-Organizer
 
-A web application to organize daily tasks for the employees to manage their time and work efficiently.
+Our Website Is a Memoranda to Save Your Tasks as a List, in order not to forget any of your daily or weekly or monthly tasks.That will save your time and keep you up to date with your work without any delay!! The technologies that we used in our projects were HTML, CSS, JavaScript, and Bootstrap, Agile Guide, TRELLO.
 
-You received the website requirement as follows: 
-home page with description,
-SignIn& SignUp
-Cards "Tasks"
-filter by priority and status
-task page
-Save users Todo's
-delete todo cards
-Change theme"dark,light"
-Edit todo cards
- logged out
+its pasically a web application to organize daily tasks for the user to manage their time and work efficiently.
+
+ the benefits of a daily to-do list
+ 
+-Increases productivity. 
+-Provides motivation. 
+-Improves memory. 
+-Reduces stress. 
+
 
 Team members :
-Osama Dosoky
-Ahmad Zahran
+
+Osama Dosoky (S) /
+
+waad Awajneh /
+
+Rama Jaradat (P) / 
+
+Ahmad Zahran /
+
 Ibrahim Taqieddin
-Rama Jaradat
-waad awajneh
 
-#live link : https://ahmadyzahran.github.io/Task-Organizer/
 
-#organization github link : https://github.com/Task-Organizer/Main-Task-Organizer/tree/main
+[organizations link](https://task-organizer.github.io/Main-Task-Organizer/)
 
-Trello URL : https://trello.com/b/YStX5fIr/project
+[live link](https://task-organizer.github.io/Main-Task-Organizer/)
 
-wireframe and mockup pdf : [task-organizaer_1.pdf](https://github.com/AhmadyZahran/Task-Organizer/files/9438612/task-organizaer_1.pdf)
+[trllo](https://trello.com/b/YStX5fIr/project)
+
+[wairfram.pdf](https://github.com/Task-Organizer/Main-Task-Organizer/files/9442271/wairfram.pdf)
+
+[mockup.pdf](https://github.com/Task-Organizer/Main-Task-Organizer/files/9442273/mockup.pdf)
+
+
+
+
+
+
